@@ -32,8 +32,10 @@ dependencies {
     implementation(
         "org.springframework.boot:spring-boot",
         "org.springframework.boot:spring-boot-starter-web",
+        "org.springframework.boot:spring-boot-starter-websocket",
         "org.springframework.boot:spring-boot-starter-data-jpa",
         "org.springframework.boot:spring-boot-starter-validation",
+        "org.springframework.boot:spring-boot-starter-aop",
 
         "org.mapstruct:mapstruct:${mapstructVersion}",
         "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}",
