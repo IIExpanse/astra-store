@@ -1,0 +1,10 @@
+server:
+  port: 8080
+spring:
+  liquibase:
+    change-log: classpath:db/migration/changelog.xml
+    url: ${DB_URL}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    default-schema: entities
+    enabled: true
