@@ -11,7 +11,7 @@ ___
 - Java 17
 - Gradle
 - Spring Framework (Boot, Web, Websocket, Data, AOP)
-- Elastic, FluentID, Kibana
+- Elastic, FluentD, Kibana
 - PostgreSQL
 - Liquibase
 - JUnit
