@@ -1,5 +1,7 @@
 rootProject.name = "astra-store"
 
+include("support-chat-service")
+
 pluginManagement {
     val springBootVersion: String by settings
     val springDependencyManagementVersion: String by settings
