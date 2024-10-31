@@ -1,4 +1,4 @@
-# Entity service
+# Astra store
 
 ___
 
@@ -10,7 +10,8 @@ ___
 
 - Java 17
 - Gradle
-- Spring Framework (Boot, Web, Data)
+- Spring Framework (Boot, Web, Websocket, Data, AOP)
+- Elastic, FluentID, Kibana
 - PostgreSQL
 - Liquibase
 - JUnit
