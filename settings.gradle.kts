@@ -1,4 +1,4 @@
-rootProject.name = "entity-service"
+rootProject.name = "astra-store"
 
 pluginManagement {
     val springBootVersion: String by settings
