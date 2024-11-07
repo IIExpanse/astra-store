@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EntityApplication {
+public class SupportChatApplication {
     public static void main(String[] args) {
-        SpringApplication.run(EntityApplication.class, args);
+        SpringApplication.run(SupportChatApplication.class, args);
     }
 }
