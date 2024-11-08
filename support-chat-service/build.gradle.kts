@@ -1,4 +1,3 @@
-
 plugins {
     id("java")
     id("org.springframework.boot")
@@ -63,6 +62,10 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.withType<ProcessResources> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.test {
