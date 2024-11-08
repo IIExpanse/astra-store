@@ -25,7 +25,7 @@ import java.util.List;
 public class Message {
     @Id
     @GeneratedValue(generator = "message_id_seq_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "message_id_seq_generator", sequenceName = "message_id_seq_generator",
+    @SequenceGenerator(name = "message_id_seq_generator", sequenceName = "chat.message_id_seq",
             schema = "chat", allocationSize = 1)
     private Long id;
     @NotNull

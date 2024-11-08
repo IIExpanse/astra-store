@@ -18,7 +18,7 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(generator = "users_id_seq_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "users_id_seq_generator", sequenceName = "users_id_seq_generator",
+    @SequenceGenerator(name = "users_id_seq_generator", sequenceName = "users.users_id_seq",
             schema = "users", allocationSize = 1)
     private Long id;
     private String email;
