@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users.user
 CREATE TABLE IF NOT EXISTS chat.chat
 (
     id       BIGINT,
-    is_group BOOLEAN NOT NULL DEFAULT FALSE,
+    is_group_chat BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_chat PRIMARY KEY (id)
 );
 
