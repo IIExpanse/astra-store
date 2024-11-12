@@ -14,11 +14,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users", schema = "users")
+@Table(name = "user", schema = "users")
 public class User {
     @Id
-    @GeneratedValue(generator = "users_id_seq_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "users_id_seq_generator", sequenceName = "users.users_id_seq",
+    @GeneratedValue(generator = "user_id_seq_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_id_seq_generator", sequenceName = "users.user_id_seq",
             schema = "users", allocationSize = 1)
     private Long id;
     private String email;

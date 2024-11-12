@@ -9,7 +9,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,17 +27,17 @@ public class Message {
     @SequenceGenerator(name = "message_id_seq_generator", sequenceName = "chat.message_id_seq",
             schema = "chat", allocationSize = 1)
     private Long id;
-    @NotNull
     private String text;
-    @NotNull
     private OffsetDateTime timestamp;
     @ManyToOne
     @JoinColumn(name = "replied_to", referencedColumnName = "id")
     private Message repliedTo;
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
+    @ManyToOne
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
+    private Chat chat;
     @OneToMany(mappedBy = "repliedTo")
     private List<Message> repliedBy;
 }
