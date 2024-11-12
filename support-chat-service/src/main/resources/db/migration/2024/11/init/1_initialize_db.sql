@@ -18,15 +18,15 @@ CREATE TABLE IF NOT EXISTS users.user
 
 CREATE TABLE IF NOT EXISTS chat.chat
 (
-    id       BIGINT,
-    is_group_chat BOOLEAN NOT NULL DEFAULT FALSE,
+    id   BIGINT,
+    name VARCHAR(100) NOT NULL,
     CONSTRAINT pk_chat PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS chat.chat_user
 (
-    chat_id BIGINT,
-    user_id BIGINT,
+    chat_id   BIGINT,
+    user_id   BIGINT,
     user_role VARCHAR(20) NOT NULL,
     CONSTRAINT pk_chat_user PRIMARY KEY (chat_id, user_id)
 );
