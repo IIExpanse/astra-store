@@ -7,8 +7,9 @@ import ru.expanse.exception.BusinessException;
 import ru.expanse.exception.ExceptionCode;
 import ru.expanse.mapper.MessageMapper;
 import ru.expanse.model.Message;
-import ru.expanse.schema.UpdateMessageRequest;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -25,18 +26,18 @@ public class MessageDaoAdapter {
         return messageRepository.findById(id);
     }
 
-    public Message update(UpdateMessageRequest request) {
-        Message message = getById(request.id())
+    public List<Message> getAll(OffsetDateTime from , OffsetDateTime to) {
+        return messageRepository.findAllByTimestampGreaterThanEqualAndTimestampLessThanEqual(from, to);
+    }
+
+    public Message update(Message newMessage) {
+        Message message = getById(newMessage.getId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
-        message = messageMapper.updateModel(request, message);
+        message = messageMapper.updateModel(newMessage, message);
         return save(message);
     }
 
-    public boolean delete(Long id) {
-        if (messageRepository.findById(id).isEmpty()) {
-            return false;
-        }
+    public void delete(Long id) {
         messageRepository.deleteById(id);
-        return true;
     }
 }

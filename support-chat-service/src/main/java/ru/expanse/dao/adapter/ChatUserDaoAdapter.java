@@ -12,7 +12,6 @@ import ru.expanse.model.Chat;
 import ru.expanse.model.ChatUser;
 import ru.expanse.model.ChatUserId;
 import ru.expanse.model.User;
-import ru.expanse.schema.UpdateChatUserRequest;
 
 import java.util.Optional;
 
@@ -32,20 +31,15 @@ public class ChatUserDaoAdapter {
         return chatUserRepository.findById(getCompositeId(chatId, userId));
     }
 
-    public ChatUser update(UpdateChatUserRequest request) {
-        ChatUser chatUser = getById(request.chatId(), request.userId())
+    public ChatUser update(ChatUser newChatUser) {
+        ChatUser chatUser = chatUserRepository.findById(newChatUser.getChatUserId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.CHAT_USER_ASSOCIATION_NOT_FOUND));
-        chatUser = chatUserMapper.updateModel(request, chatUser);
+        chatUser = chatUserMapper.updateModel(newChatUser, chatUser);
         return save(chatUser);
     }
 
-    public boolean delete(Long chatId, Long userId) {
-        ChatUserId id = getCompositeId(chatId, userId);
-        if (chatUserRepository.findById(id).isEmpty()) {
-            return false;
-        }
-        chatUserRepository.deleteById(id);
-        return true;
+    public void delete(Long chatId, Long userId) {
+        chatUserRepository.deleteById(getCompositeId(chatId, userId));
     }
 
     private ChatUserId getCompositeId(Long chatId, Long userId) {
