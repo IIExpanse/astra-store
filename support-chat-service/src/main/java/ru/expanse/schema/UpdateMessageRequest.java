@@ -1,4 +1,10 @@
 package ru.expanse.schema;
 
-public record UpdateMessageRequest(Long id, String text) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateMessageRequest(
+        @NotNull Long id,
+        @NotBlank String text
+) {
 }
