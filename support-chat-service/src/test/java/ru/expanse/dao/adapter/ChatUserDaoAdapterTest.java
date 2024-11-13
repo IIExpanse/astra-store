@@ -12,7 +12,6 @@ import ru.expanse.model.ChatUser;
 import ru.expanse.model.ChatUserId;
 import ru.expanse.model.User;
 import ru.expanse.model.UserRole;
-import ru.expanse.schema.UpdateChatUserRequest;
 import ru.expanse.util.DataProvider;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,19 +44,17 @@ class ChatUserDaoAdapterTest {
             Long chatId = chatUser.getChatUserId().getChat().getId();
             Long userId = chatUser.getChatUserId().getUser().getId();
 
-            var request = new UpdateChatUserRequest(
-                    chatId,
-                    userId,
-                    UserRole.USER
-            );
+            ChatUser newChatUser = new ChatUser();
+            newChatUser.setChatUserId(chatUser.getChatUserId());
+            newChatUser.setUserRole(UserRole.USER);
 
-            chatUserDaoAdapter.update(request);
+            chatUserDaoAdapter.update(newChatUser);
             chatUser = chatUserDaoAdapter.getById(
                             chatId,
                             userId)
                     .orElseThrow();
 
-            assertEquals(request.userRole(), chatUser.getUserRole());
+            assertEquals(newChatUser.getUserRole(), chatUser.getUserRole());
         }
 
         @Test

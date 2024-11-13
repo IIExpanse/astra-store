@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.expanse.dao.repository.ChatRepository;
 import ru.expanse.dao.repository.UserRepository;
+import ru.expanse.mapper.MessageMapper;
 import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
@@ -24,6 +25,8 @@ class MessageDaoAdapterTest {
     private UserRepository userRepository;
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Nested
     class CrudTest {
@@ -37,16 +40,15 @@ class MessageDaoAdapterTest {
         void update() {
             Message message = saveDefaultMessage();
             UpdateMessageRequest request = new UpdateMessageRequest(message.getId(), "new text");
-            message = messageDaoAdapter.update(request);
+            message = messageDaoAdapter.update(messageMapper.toModel(request));
             assertEquals(messageDaoAdapter.getById(message.getId()).orElseThrow().getText(), request.text());
         }
 
         @Test
         void delete() {
             Message message = saveDefaultMessage();
-            assertTrue(messageDaoAdapter.delete(message.getId()));
-            assertFalse(messageDaoAdapter.delete(message.getId()));
-            assertFalse(messageDaoAdapter.getById(message.getId()).isPresent());
+            messageDaoAdapter.delete(message.getId());
+            assertTrue(messageDaoAdapter.getById(message.getId()).isEmpty());
         }
     }
 
