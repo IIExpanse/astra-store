@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.expanse.dao.repository.ChatRepository;
 import ru.expanse.dao.repository.UserRepository;
+import ru.expanse.exception.BusinessException;
+import ru.expanse.exception.ExceptionCode;
 import ru.expanse.mapper.MessageMapper;
 import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
@@ -49,6 +51,17 @@ class MessageDaoAdapterTest {
             Message message = saveDefaultMessage();
             messageDaoAdapter.delete(message.getId());
             assertTrue(messageDaoAdapter.getById(message.getId()).isEmpty());
+        }
+    }
+
+    @Nested
+    class ExceptionsTest {
+        @Test
+        void throwsExceptionForNotFoundMessage() {
+            Message message = new Message();
+            message.setId(1L);
+            Exception e = assertThrows(BusinessException.class, () -> messageDaoAdapter.update(message));
+            assertEquals(e.getMessage(), ExceptionCode.MESSAGE_NOT_FOUND.getMessage());
         }
     }
 
