@@ -12,5 +12,7 @@ public record SaveMessageRequest (
     OffsetDateTime timestamp,
     Long repliedTo,
     @NotNull
-    Long authorId
+    Long authorId,
+    @NotNull
+    Long chatId
 ) {}

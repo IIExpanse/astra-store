@@ -7,6 +7,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.MessageRecord;
@@ -19,7 +20,8 @@ public interface MessageMapper {
     @Mapping(target = "repliedTo", source = "repliedTo")
     @Mapping(target = "text", source = "request.text")
     @Mapping(target = "timestamp", source = "request.timestamp")
-    Message toModel(SaveMessageRequest request, User author, Message repliedTo);
+    @Mapping(target = "chat", source = "chat")
+    Message toModel(SaveMessageRequest request, User author, Message repliedTo, Chat chat);
 
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     Message toModel(UpdateMessageRequest request);

@@ -2,11 +2,13 @@ package ru.expanse.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.expanse.dao.adapter.ChatDaoAdapter;
 import ru.expanse.dao.adapter.MessageDaoAdapter;
 import ru.expanse.dao.adapter.UserDaoAdapter;
 import ru.expanse.exception.BusinessException;
 import ru.expanse.exception.ExceptionCode;
 import ru.expanse.mapper.MessageMapper;
+import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.DeleteMessageRequest;
@@ -25,6 +27,7 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     private final MessageDaoAdapter messageDaoAdapter;
     private final UserDaoAdapter userDaoAdapter;
+    private final ChatDaoAdapter chatDaoAdapter;
     private final MessageMapper messageMapper;
 
     @Override
@@ -32,13 +35,16 @@ public class MessageServiceImpl implements MessageService {
         User author = userDaoAdapter.getById(request.authorId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
 
+        Chat chat = chatDaoAdapter.getById(request.chatId())
+                .orElseThrow(() -> new BusinessException(ExceptionCode.CHAT_NOT_FOUND));
+
         Message repliedTo = null;
         if (request.repliedTo() != null) {
             repliedTo = messageDaoAdapter.getById(request.repliedTo())
                     .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
         }
 
-        Message message = messageMapper.toModel(request, author, repliedTo);
+        Message message = messageMapper.toModel(request, author, repliedTo, chat);
         message = messageDaoAdapter.save(message);
         return new MessageEvent(message.getId(), message.getChat().getId(), MessageAction.CREATE);
     }
