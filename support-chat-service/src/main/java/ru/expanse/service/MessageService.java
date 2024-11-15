@@ -4,12 +4,13 @@ import ru.expanse.schema.DeleteMessageRequest;
 import ru.expanse.schema.GetAllMessagesRequest;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
+import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.schema.UpdateMessageRequest;
 
 import java.util.List;
 
 public interface MessageService {
-    MessageEvent saveMessage(MessageRecord messageRecord);
+    MessageEvent saveMessage(SaveMessageRequest request);
 
     MessageRecord getMessage(Long id);
 

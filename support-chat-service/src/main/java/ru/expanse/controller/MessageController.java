@@ -13,6 +13,7 @@ import ru.expanse.schema.DeleteMessageRequest;
 import ru.expanse.schema.GetAllMessagesRequest;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
+import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.schema.UpdateMessageRequest;
 import ru.expanse.service.MessageService;
 
@@ -37,8 +38,8 @@ public class MessageController {
 
     @MessageMapping("/message/new")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent postMessage(@Valid MessageRecord record) {
-        return messageService.saveMessage(record);
+    public MessageEvent postMessage(@Valid SaveMessageRequest request) {
+        return messageService.saveMessage(request);
     }
 
     @MessageMapping("/message/edit")

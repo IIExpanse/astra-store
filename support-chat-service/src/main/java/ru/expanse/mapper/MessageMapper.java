@@ -10,15 +10,16 @@ import org.mapstruct.ReportingPolicy;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.MessageRecord;
+import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.schema.UpdateMessageRequest;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = BaseTypesMapper.class)
 public interface MessageMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "repliedTo", source = "repliedTo")
-    @Mapping(target = "text", source = "record.text")
-    @Mapping(target = "timestamp", source = "record.timestamp")
-    Message toModel(MessageRecord record, User author, Message repliedTo);
+    @Mapping(target = "text", source = "request.text")
+    @Mapping(target = "timestamp", source = "request.timestamp")
+    Message toModel(SaveMessageRequest request, User author, Message repliedTo);
 
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     Message toModel(UpdateMessageRequest request);

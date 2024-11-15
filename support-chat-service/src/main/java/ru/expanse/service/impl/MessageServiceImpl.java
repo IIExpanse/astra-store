@@ -14,6 +14,7 @@ import ru.expanse.schema.GetAllMessagesRequest;
 import ru.expanse.schema.MessageAction;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
+import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.schema.UpdateMessageRequest;
 import ru.expanse.service.MessageService;
 
@@ -27,17 +28,17 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
 
     @Override
-    public MessageEvent saveMessage(MessageRecord messageRecord) {
-        User author = userDaoAdapter.getById(messageRecord.authorId())
+    public MessageEvent saveMessage(SaveMessageRequest request) {
+        User author = userDaoAdapter.getById(request.authorId())
                 .orElseThrow(() -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
 
         Message repliedTo = null;
-        if (messageRecord.repliedTo() != null) {
-            repliedTo = messageDaoAdapter.getById(messageRecord.repliedTo())
+        if (request.repliedTo() != null) {
+            repliedTo = messageDaoAdapter.getById(request.repliedTo())
                     .orElseThrow(() -> new BusinessException(ExceptionCode.MESSAGE_NOT_FOUND));
         }
 
-        Message message = messageMapper.toModel(messageRecord, author, repliedTo);
+        Message message = messageMapper.toModel(request, author, repliedTo);
         message = messageDaoAdapter.save(message);
         return new MessageEvent(message.getId(), message.getChat().getId(), MessageAction.CREATE);
     }
