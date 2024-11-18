@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import ru.expanse.dao.adapter.ChatDaoAdapter;
 import ru.expanse.dao.adapter.MessageDaoAdapter;
@@ -12,15 +13,16 @@ import ru.expanse.exception.BusinessException;
 import ru.expanse.exception.ExceptionCode;
 import ru.expanse.mapper.MessageMapper;
 import ru.expanse.model.Chat;
+import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.service.MessageService;
 
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static ru.expanse.util.DataProvider.*;
 
 class MessageServiceImplTest {
     private MessageService messageService;
@@ -41,16 +43,28 @@ class MessageServiceImplTest {
     }
 
     @Nested
+    class CrudTest {
+        @Test
+        void saveMessage() {
+            SaveMessageRequest request = getSaveMessageRequest();
+            when(userDaoAdapter.getById(request.authorId()))
+                    .thenReturn(Optional.of(new User()));
+            when(chatDaoAdapter.getById(request.authorId()))
+                    .thenReturn(Optional.of(new Chat()));
+            when(messageDaoAdapter.getById(request.repliedTo()))
+                    .thenReturn(Optional.of(new Message()));
+            when(messageDaoAdapter.save(ArgumentMatchers.any(Message.class)))
+                    .thenReturn(getMessage(getUser(), getChat()));
+            assertNotNull(messageService.saveMessage(request));
+        }
+    }
+
+    @Nested
     class ExceptionTest {
         @Test
         void saveMessage_shouldThrowExceptionForNotFoundEntities() {
-            SaveMessageRequest request = new SaveMessageRequest(
-                    "abc",
-                    OffsetDateTime.now(),
-                    1L,
-                    1L,
-                    1L
-            );
+            SaveMessageRequest request = getSaveMessageRequest();
+
             when(userDaoAdapter.getById(request.authorId()))
                     .thenReturn(Optional.empty());
             Exception e = assertThrows(BusinessException.class, () -> messageService.saveMessage(request));

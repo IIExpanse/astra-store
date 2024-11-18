@@ -3,6 +3,7 @@ package ru.expanse.util;
 import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
+import ru.expanse.schema.SaveMessageRequest;
 
 import java.time.OffsetDateTime;
 
@@ -26,5 +27,15 @@ public class DataProvider {
         Chat chat = new Chat();
         chat.setName("chat_name");
         return chat;
+    }
+
+    public static SaveMessageRequest getSaveMessageRequest() {
+        return new SaveMessageRequest(
+                "abc",
+                OffsetDateTime.now(),
+                1L,
+                1L,
+                1L
+        );
     }
 }
