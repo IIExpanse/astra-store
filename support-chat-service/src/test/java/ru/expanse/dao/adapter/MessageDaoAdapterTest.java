@@ -68,17 +68,17 @@ class MessageDaoAdapterTest {
     private Message saveDefaultMessage() {
         User user = saveDefaultUser();
         Chat chat = saveDefaultChat();
-        Message message = DataProvider.getMessage(user, chat);
+        Message message = DataProvider.getDefaultMessage(user, chat);
         return messageDaoAdapter.save(message);
     }
 
     private User saveDefaultUser() {
-        User user = DataProvider.getUser();
+        User user = DataProvider.getDefaultUser();
         return userRepository.save(user);
     }
 
     private Chat saveDefaultChat() {
-        Chat chat = DataProvider.getChat();
+        Chat chat = DataProvider.getDefaultChat();
         return chatRepository.save(chat);
     }
 }

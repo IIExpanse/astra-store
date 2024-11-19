@@ -8,7 +8,7 @@ import ru.expanse.schema.SaveMessageRequest;
 import java.time.OffsetDateTime;
 
 public class DataProvider {
-    public static Message getMessage(User user, Chat chat) {
+    public static Message getDefaultMessage(User user, Chat chat) {
         Message message = new Message();
         message.setText("Some chat message");
         message.setTimestamp(OffsetDateTime.now());
@@ -17,19 +17,19 @@ public class DataProvider {
         return message;
     }
 
-    public static User getUser() {
+    public static User getDefaultUser() {
         User user = new User();
         user.setEmail("some-mail@mail.com");
         return user;
     }
 
-    public static Chat getChat() {
+    public static Chat getDefaultChat() {
         Chat chat = new Chat();
         chat.setName("chat_name");
         return chat;
     }
 
-    public static SaveMessageRequest getSaveMessageRequest() {
+    public static SaveMessageRequest getDefaultSaveMessageRequest() {
         return new SaveMessageRequest(
                 "abc",
                 OffsetDateTime.now(),

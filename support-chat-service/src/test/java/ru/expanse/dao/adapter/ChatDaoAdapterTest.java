@@ -20,7 +20,7 @@ class ChatDaoAdapterTest {
     class CrudTest {
         @Test
         void saveAndGet() {
-            Chat chat = DataProvider.getChat();
+            Chat chat = DataProvider.getDefaultChat();
             chatRepository.save(chat);
             assertTrue(chatRepository.getById(chat.getId()).isPresent());
         }

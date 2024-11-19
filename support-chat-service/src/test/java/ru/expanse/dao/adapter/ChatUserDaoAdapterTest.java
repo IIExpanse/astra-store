@@ -82,12 +82,12 @@ class ChatUserDaoAdapterTest {
     }
 
     private User saveDefaultUser() {
-        User user = DataProvider.getUser();
+        User user = DataProvider.getDefaultUser();
         return userRepository.save(user);
     }
 
     private Chat saveDefaultChat() {
-        Chat chat = DataProvider.getChat();
+        Chat chat = DataProvider.getDefaultChat();
         return chatRepository.save(chat);
     }
 }
