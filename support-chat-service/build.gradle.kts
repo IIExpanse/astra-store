@@ -70,6 +70,7 @@ tasks.withType<ProcessResources> {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
 
 fun DependencyHandler.implementation(vararg deps: Any) {
