@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ import java.util.List;
 @Validated
 public class MessageController {
     private final MessageService messageService;
-    private static final String EVENTS_TOPIC = "/topic/message-events";
+    public static final String EVENTS_TOPIC = "/topic/message-events";
 
     @GetMapping("/message/{id}")
     public ResponseEntity<MessageRecord> getMessage(@PathVariable Long id) {
@@ -39,19 +40,19 @@ public class MessageController {
 
     @MessageMapping("/message/new")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent postMessage(@Valid @RequestBody SaveMessageRequest request) {
+    public MessageEvent postMessage(@Valid @Payload SaveMessageRequest request) {
         return messageService.saveMessage(request);
     }
 
     @MessageMapping("/message/edit")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent updateMessage(@Valid @RequestBody UpdateMessageRequest record) {
+    public MessageEvent updateMessage(@Valid @Payload UpdateMessageRequest record) {
         return messageService.updateMessage(record);
     }
 
     @MessageMapping("/message/delete")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent deleteMessage(@Valid @RequestBody DeleteMessageRequest record) {
+    public MessageEvent deleteMessage(@Valid @Payload DeleteMessageRequest record) {
         return messageService.deleteMessage(record);
     }
 }
