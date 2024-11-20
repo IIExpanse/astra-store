@@ -43,7 +43,7 @@ class MessageServiceImplTest {
         chatDaoAdapter = Mockito.mock(ChatDaoAdapter.class);
         messageService = new MessageServiceImpl(
                 messageDaoAdapter,
-                userDaoAdapter, 
+                userDaoAdapter,
                 chatDaoAdapter,
                 Mappers.getMapper(MessageMapper.class)
         );
