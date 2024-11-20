@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.expanse.schema.DeleteMessageRequest;
 import ru.expanse.schema.GetAllMessagesRequest;
 import ru.expanse.schema.MessageEvent;
@@ -32,25 +33,25 @@ public class MessageController {
     }
 
     @GetMapping("/messages")
-    public ResponseEntity<List<MessageRecord>> getAllMessages(@Valid GetAllMessagesRequest request) {
+    public ResponseEntity<List<MessageRecord>> getAllMessages(@Valid @RequestBody GetAllMessagesRequest request) {
         return ResponseEntity.ok(messageService.getAllMessages(request));
     }
 
     @MessageMapping("/message/new")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent postMessage(@Valid SaveMessageRequest request) {
+    public MessageEvent postMessage(@Valid @RequestBody SaveMessageRequest request) {
         return messageService.saveMessage(request);
     }
 
     @MessageMapping("/message/edit")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent updateMessage(@Valid UpdateMessageRequest record) {
+    public MessageEvent updateMessage(@Valid @RequestBody UpdateMessageRequest record) {
         return messageService.updateMessage(record);
     }
 
     @MessageMapping("/message/delete")
     @SendTo(EVENTS_TOPIC)
-    public MessageEvent deleteMessage(@Valid DeleteMessageRequest record) {
+    public MessageEvent deleteMessage(@Valid @RequestBody DeleteMessageRequest record) {
         return messageService.deleteMessage(record);
     }
 }
