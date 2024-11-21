@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,11 +23,13 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+import ru.expanse.schema.DeleteMessageRequest;
 import ru.expanse.schema.GetAllMessagesRequest;
 import ru.expanse.schema.MessageAction;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
 import ru.expanse.schema.SaveMessageRequest;
+import ru.expanse.schema.UpdateMessageRequest;
 import ru.expanse.service.MessageService;
 import ru.expanse.util.DataProvider;
 
@@ -95,16 +96,14 @@ class MessageControllerTest {
     @Nested
     class WebSocketTest {
         private BlockingQueue<MessageEvent> blockingQueue;
-        private WebSocketStompClient stompClient;
         private StompSession session;
 
         @BeforeEach
         @SneakyThrows
         public void setup() {
-
-            blockingQueue = new LinkedBlockingDeque<>();
-            stompClient = new WebSocketStompClient(new SockJsClient(
+            WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
                     List.of(new WebSocketTransport(new StandardWebSocketClient()))));
+            blockingQueue = new LinkedBlockingDeque<>();
 
             stompClient.setMessageConverter(new MappingJackson2MessageConverter(objectMapper));
             session = stompClient.connectAsync(getWsPath(), new DefaultStompSessionHandler())
@@ -120,24 +119,45 @@ class MessageControllerTest {
         @SneakyThrows
         void postMessage() {
             MessageEvent event = new MessageEvent(1L, 2L, MessageAction.CREATE);
-            Mockito.when(messageService.saveMessage(ArgumentMatchers.any(SaveMessageRequest.class)))
+            when(messageService.saveMessage(ArgumentMatchers.any(SaveMessageRequest.class)))
                             .thenReturn(event);
             session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
 
             SaveMessageRequest request = DataProvider.getDefaultSaveMessageRequest();
 
-            session.send("/ws-request/message/new", request);
+            session.send("/ws-request/message/create", request);
             assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
         @Test
+        @SneakyThrows
         void updateMessage() {
+            MessageEvent event = new MessageEvent(1L, 2L, MessageAction.UPDATE);
+            when(messageService.updateMessage(ArgumentMatchers.any(UpdateMessageRequest.class)))
+                    .thenReturn(event);
+            session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
+
+            UpdateMessageRequest request = new UpdateMessageRequest(1L, "abc");
+
+            session.send("/ws-request/message/update", request);
+            assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
         @Test
+        @SneakyThrows
         void deleteMessage() {
+            MessageEvent event = new MessageEvent(1L, 2L, MessageAction.DELETE);
+            when(messageService.deleteMessage(ArgumentMatchers.any(DeleteMessageRequest.class)))
+                    .thenReturn(event);
+            session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
+
+            DeleteMessageRequest request = new DeleteMessageRequest(1L);
+
+            session.send("/ws-request/message/delete", request);
+            assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
+        @SuppressWarnings("NullableProblems")
         class DefaultStompSessionHandler extends StompSessionHandlerAdapter {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
@@ -146,7 +166,7 @@ class MessageControllerTest {
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                blockingQueue.offer((MessageEvent) o);
+                blockingQueue.add((MessageEvent) o);
             }
 
             @Override
