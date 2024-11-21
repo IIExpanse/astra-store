@@ -38,13 +38,13 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getAllMessages(request));
     }
 
-    @MessageMapping("/message/new")
+    @MessageMapping("/message/create")
     @SendTo(EVENTS_TOPIC)
     public MessageEvent postMessage(@Valid @Payload SaveMessageRequest request) {
         return messageService.saveMessage(request);
     }
 
-    @MessageMapping("/message/edit")
+    @MessageMapping("/message/update")
     @SendTo(EVENTS_TOPIC)
     public MessageEvent updateMessage(@Valid @Payload UpdateMessageRequest record) {
         return messageService.updateMessage(record);
