@@ -1,4 +1,4 @@
-package ru.expanse;
+package ru.expanse.config;
 
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
