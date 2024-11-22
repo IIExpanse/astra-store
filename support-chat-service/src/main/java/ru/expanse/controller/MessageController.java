@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +26,7 @@ import java.util.List;
 @Validated
 public class MessageController {
     private final MessageService messageService;
+    private final SimpMessagingTemplate template;
     public static final String EVENTS_TOPIC = "/topic/message-events";
 
     @GetMapping("/message/{id}")
@@ -39,20 +40,24 @@ public class MessageController {
     }
 
     @MessageMapping("/message/create")
-    @SendTo(EVENTS_TOPIC)
-    public MessageEvent postMessage(@Valid @Payload SaveMessageRequest request) {
-        return messageService.saveMessage(request);
+    public void postMessage(@Valid @Payload SaveMessageRequest request) {
+        MessageEvent messageEvent = messageService.saveMessage(request);
+        template.convertAndSend(getChatPath(messageEvent.chatId()), messageEvent);
     }
 
     @MessageMapping("/message/update")
-    @SendTo(EVENTS_TOPIC)
-    public MessageEvent updateMessage(@Valid @Payload UpdateMessageRequest record) {
-        return messageService.updateMessage(record);
+    public void updateMessage(@Valid @Payload UpdateMessageRequest request) {
+        MessageEvent messageEvent = messageService.updateMessage(request);
+        template.convertAndSend(getChatPath(messageEvent.chatId()), messageEvent);
     }
 
     @MessageMapping("/message/delete")
-    @SendTo(EVENTS_TOPIC)
-    public MessageEvent deleteMessage(@Valid @Payload DeleteMessageRequest record) {
-        return messageService.deleteMessage(record);
+    public void deleteMessage(@Valid @Payload DeleteMessageRequest request) {
+        MessageEvent messageEvent = messageService.deleteMessage(request);
+        template.convertAndSend(getChatPath(messageEvent.chatId()), messageEvent);
+    }
+
+    private String getChatPath(Long chatId) {
+        return EVENTS_TOPIC + "/chat/" + chatId;
     }
 }

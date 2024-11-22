@@ -45,6 +45,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.expanse.controller.MessageController.EVENTS_TOPIC;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -121,7 +122,7 @@ class MessageControllerTest {
             MessageEvent event = new MessageEvent(1L, 2L, MessageAction.CREATE);
             when(messageService.saveMessage(ArgumentMatchers.any(SaveMessageRequest.class)))
                             .thenReturn(event);
-            session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
+            session.subscribe(getChatPath(event.chatId()), new DefaultStompSessionHandler());
 
             SaveMessageRequest request = DataProvider.getDefaultSaveMessageRequest();
 
@@ -135,7 +136,7 @@ class MessageControllerTest {
             MessageEvent event = new MessageEvent(1L, 2L, MessageAction.UPDATE);
             when(messageService.updateMessage(ArgumentMatchers.any(UpdateMessageRequest.class)))
                     .thenReturn(event);
-            session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
+            session.subscribe(getChatPath(event.chatId()), new DefaultStompSessionHandler());
 
             UpdateMessageRequest request = new UpdateMessageRequest(1L, "abc");
 
@@ -149,7 +150,7 @@ class MessageControllerTest {
             MessageEvent event = new MessageEvent(1L, 2L, MessageAction.DELETE);
             when(messageService.deleteMessage(ArgumentMatchers.any(DeleteMessageRequest.class)))
                     .thenReturn(event);
-            session.subscribe(MessageController.EVENTS_TOPIC, new DefaultStompSessionHandler());
+            session.subscribe(getChatPath(event.chatId()), new DefaultStompSessionHandler());
 
             DeleteMessageRequest request = new DeleteMessageRequest(1L);
 
@@ -177,6 +178,10 @@ class MessageControllerTest {
 
         private String getWsPath() {
             return String.format("ws://localhost:%d/ws", port);
+        }
+
+        private String getChatPath(Long chatId) {
+            return EVENTS_TOPIC + "/chat/" + chatId;
         }
     }
 }
