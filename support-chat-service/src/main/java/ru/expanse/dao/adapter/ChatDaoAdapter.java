@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.expanse.dao.repository.ChatRepository;
 import ru.expanse.model.Chat;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -18,5 +19,9 @@ public class ChatDaoAdapter {
 
     public Optional<Chat> getById(Long id) {
         return chatRepository.findById(id);
+    }
+
+    public List<Chat> getChatsByFilter(Long userId, List<Long> chatIds) {
+        return chatRepository.getChatsByFilter(userId, chatIds);
     }
 }
