@@ -1,8 +1,11 @@
 package ru.expanse.util;
 
 import ru.expanse.model.Chat;
+import ru.expanse.model.ChatUser;
+import ru.expanse.model.ChatUserId;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
+import ru.expanse.model.UserRole;
 import ru.expanse.schema.MessageRecord;
 import ru.expanse.schema.SaveMessageRequest;
 
@@ -28,6 +31,13 @@ public class DataProvider {
         Chat chat = new Chat();
         chat.setName("chat_name");
         return chat;
+    }
+
+    public static ChatUser getDefaultChatUser(ChatUserId chatUserId) {
+        ChatUser chatUser = new ChatUser();
+        chatUser.setUserRole(UserRole.ADMIN);
+        chatUser.setChatUserId(chatUserId);
+        return chatUser;
     }
 
     public static SaveMessageRequest getDefaultSaveMessageRequest() {
