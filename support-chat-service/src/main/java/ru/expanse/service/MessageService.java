@@ -1,7 +1,7 @@
 package ru.expanse.service;
 
 import ru.expanse.schema.DeleteMessageRequest;
-import ru.expanse.schema.GetAllMessagesRequest;
+import ru.expanse.schema.GetMessagesByFilterRequest;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
 import ru.expanse.schema.SaveMessageRequest;
@@ -14,7 +14,7 @@ public interface MessageService {
 
     MessageRecord getMessage(Long id);
 
-    List<MessageRecord> getAllMessages(GetAllMessagesRequest request);
+    List<MessageRecord> getMessagesByFilter(GetMessagesByFilterRequest request);
 
     MessageEvent updateMessage(UpdateMessageRequest request);
 

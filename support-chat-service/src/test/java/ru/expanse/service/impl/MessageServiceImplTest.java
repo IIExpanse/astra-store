@@ -16,7 +16,7 @@ import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.DeleteMessageRequest;
-import ru.expanse.schema.GetAllMessagesRequest;
+import ru.expanse.schema.GetMessagesByFilterRequest;
 import ru.expanse.schema.SaveMessageRequest;
 import ru.expanse.schema.UpdateMessageRequest;
 import ru.expanse.service.MessageService;
@@ -27,6 +27,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 import static ru.expanse.util.DataProvider.*;
 
@@ -74,10 +75,10 @@ class MessageServiceImplTest {
 
         @Test
         void getAllMessages() {
-            when(messageDaoAdapter.getAll(any(OffsetDateTime.class), any(OffsetDateTime.class)))
+            when(messageDaoAdapter.getMessagesByFilter(anyList(), any(OffsetDateTime.class), any(OffsetDateTime.class)))
                     .thenReturn(List.of());
-            GetAllMessagesRequest request = new GetAllMessagesRequest(OffsetDateTime.now(), OffsetDateTime.now());
-            assertNotNull(messageService.getAllMessages(request));
+            GetMessagesByFilterRequest request = new GetMessagesByFilterRequest(List.of(), OffsetDateTime.now(), OffsetDateTime.now());
+            assertNotNull(messageService.getMessagesByFilter(request));
         }
 
         @Test

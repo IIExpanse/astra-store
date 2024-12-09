@@ -26,8 +26,8 @@ public class MessageDaoAdapter {
         return messageRepository.findById(id);
     }
 
-    public List<Message> getAll(OffsetDateTime from , OffsetDateTime to) {
-        return messageRepository.findAllByTimestampGreaterThanEqualAndTimestampLessThanEqual(from, to);
+    public List<Message> getMessagesByFilter(List<Long> chatIds, OffsetDateTime from, OffsetDateTime to) {
+        return messageRepository.getMessagesByFilter(chatIds, from, to);
     }
 
     public Message update(Message newMessage) {

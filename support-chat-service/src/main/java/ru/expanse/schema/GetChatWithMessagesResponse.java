@@ -2,7 +2,7 @@ package ru.expanse.schema;
 
 import java.util.List;
 
-public record ChatRecord(
+public record GetChatWithMessagesResponse(
         Long id,
         String name,
         List<MessageRecord> messages

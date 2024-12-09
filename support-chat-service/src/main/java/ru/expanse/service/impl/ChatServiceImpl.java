@@ -8,6 +8,7 @@ import ru.expanse.dao.adapter.MessageDaoAdapter;
 import ru.expanse.dao.adapter.UserDaoAdapter;
 import ru.expanse.exception.BusinessException;
 import ru.expanse.exception.ExceptionCode;
+import ru.expanse.mapper.MessageMapper;
 import ru.expanse.model.Chat;
 import ru.expanse.model.ChatUser;
 import ru.expanse.model.ChatUserId;
@@ -15,11 +16,13 @@ import ru.expanse.model.User;
 import ru.expanse.model.UserRole;
 import ru.expanse.schema.ChatAction;
 import ru.expanse.schema.ChatEvent;
-import ru.expanse.schema.ChatRecord;
+import ru.expanse.schema.GetChatWithMessagesRequest;
+import ru.expanse.schema.GetChatWithMessagesResponse;
+import ru.expanse.schema.MessageRecord;
 import ru.expanse.schema.SaveChatRequest;
 import ru.expanse.service.ChatService;
 
-import java.time.OffsetDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
@@ -27,6 +30,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatUserDaoAdapter chatUserDaoAdapter;
     private final MessageDaoAdapter messageDaoAdapter;
     private final UserDaoAdapter userDaoAdapter;
+    private final MessageMapper messageMapper;
 
     @Override
     @Transactional
@@ -47,8 +51,23 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatRecord getChatWithMessages(Long chatId, OffsetDateTime messagesFrom, OffsetDateTime messagesTo) {
-        return null;
+    public GetChatWithMessagesResponse getChatWithMessages(GetChatWithMessagesRequest request) {
+        Chat chat = chatDaoAdapter.getById(request.chatId())
+                .orElseThrow(() -> new BusinessException(ExceptionCode.CHAT_NOT_FOUND));
+
+        List<MessageRecord> messageRecords = messageDaoAdapter.getMessagesByFilter(
+                        List.of(request.chatId()),
+                        request.from(),
+                        request.to()
+                ).stream()
+                .map(messageMapper::toRecord)
+                .toList();
+
+        return new GetChatWithMessagesResponse(
+                chat.getId(),
+                chat.getName(),
+                messageRecords
+        );
     }
 
     private ChatUser constructChatUserEntity(Chat chat, User user, UserRole userRole) {

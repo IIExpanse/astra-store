@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.expanse.schema.DeleteMessageRequest;
-import ru.expanse.schema.GetAllMessagesRequest;
+import ru.expanse.schema.GetMessagesByFilterRequest;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
 import ru.expanse.schema.SaveMessageRequest;
@@ -35,8 +35,8 @@ public class MessageController {
     }
 
     @GetMapping("/messages")
-    public ResponseEntity<List<MessageRecord>> getAllMessages(@Valid @RequestBody GetAllMessagesRequest request) {
-        return ResponseEntity.ok(messageService.getAllMessages(request));
+    public ResponseEntity<List<MessageRecord>> getAllMessages(@Valid @RequestBody GetMessagesByFilterRequest request) {
+        return ResponseEntity.ok(messageService.getMessagesByFilter(request));
     }
 
     @MessageMapping("/message/create")

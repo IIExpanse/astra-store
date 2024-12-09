@@ -24,7 +24,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import ru.expanse.schema.DeleteMessageRequest;
-import ru.expanse.schema.GetAllMessagesRequest;
+import ru.expanse.schema.GetMessagesByFilterRequest;
 import ru.expanse.schema.MessageAction;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
@@ -80,14 +80,14 @@ class MessageControllerTest {
         @SneakyThrows
         void getAllMessages() {
             List<MessageRecord> list = List.of(DataProvider.getDefaultMessageRecord());
-            when(messageService.getAllMessages(ArgumentMatchers.any(GetAllMessagesRequest.class)))
+            when(messageService.getMessagesByFilter(ArgumentMatchers.any(GetMessagesByFilterRequest.class)))
                     .thenReturn(list);
             OffsetDateTime now = OffsetDateTime.now();
 
             mockMvc.perform(
                             get("/messages")
                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                    .content(objectMapper.writeValueAsString(new GetAllMessagesRequest(now, now)))
+                                    .content(objectMapper.writeValueAsString(new GetMessagesByFilterRequest(List.of(), now, now)))
                     )
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(list)));

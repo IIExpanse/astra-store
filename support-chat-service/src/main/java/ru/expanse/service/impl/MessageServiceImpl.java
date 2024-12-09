@@ -12,7 +12,7 @@ import ru.expanse.model.Chat;
 import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.schema.DeleteMessageRequest;
-import ru.expanse.schema.GetAllMessagesRequest;
+import ru.expanse.schema.GetMessagesByFilterRequest;
 import ru.expanse.schema.MessageAction;
 import ru.expanse.schema.MessageEvent;
 import ru.expanse.schema.MessageRecord;
@@ -57,8 +57,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageRecord> getAllMessages(GetAllMessagesRequest request) {
-        return messageDaoAdapter.getAll(request.from(), request.to()).stream()
+    public List<MessageRecord> getMessagesByFilter(GetMessagesByFilterRequest request) {
+        return messageDaoAdapter.getMessagesByFilter(request.chatIds(), request.from(), request.to()).stream()
                 .map(messageMapper::toRecord)
                 .toList();
     }
