@@ -2,6 +2,7 @@ package ru.expanse.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.expanse.dao.adapter.ChatDaoAdapter;
 import ru.expanse.dao.adapter.ChatUserDaoAdapter;
 import ru.expanse.dao.adapter.MessageDaoAdapter;
@@ -24,6 +25,7 @@ import ru.expanse.service.ChatService;
 
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
     private final ChatDaoAdapter chatDaoAdapter;

@@ -1,4 +1,13 @@
 package ru.expanse.schema;
 
-public record SaveChatRequest(Long initiatorId, Long recipientId, String chatName) {
+import jakarta.validation.constraints.NotNull;
+
+public record SaveChatRequest(
+        @NotNull
+        Long initiatorId,
+        @NotNull
+        Long recipientId,
+        @NotNull
+        String chatName
+) {
 }
