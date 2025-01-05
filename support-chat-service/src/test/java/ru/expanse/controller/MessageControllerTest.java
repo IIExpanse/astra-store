@@ -121,7 +121,7 @@ class MessageControllerTest {
         void postMessage() {
             MessageEvent event = new MessageEvent(1L, 2L, MessageAction.CREATE);
             when(messageService.saveMessage(ArgumentMatchers.any(SaveMessageRequest.class)))
-                            .thenReturn(event);
+                    .thenReturn(event);
             session.subscribe(getChatPath(event.chatId()), new DefaultStompSessionHandler());
 
             SaveMessageRequest request = DataProvider.getDefaultSaveMessageRequest();
@@ -172,7 +172,7 @@ class MessageControllerTest {
 
             @Override
             public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-                exception.printStackTrace();
+                throw new AssertionError(exception);
             }
         }
 
