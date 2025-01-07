@@ -1,0 +1,23 @@
+services:
+  support-chat-service:
+    build: ./support-chat-service
+    image: support-chat-service
+    container_name: support-chat-service-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - support-chat-db
+    environment:
+      - DB_URL=jdbc:postgresql://support-chat-db:5432/support-chat-db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+
+  support-chat-db:
+    image: postgres:17.0-alpine
+    container_name: support-chat-db-container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=support-chat-db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
