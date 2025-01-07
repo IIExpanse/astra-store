@@ -49,7 +49,7 @@ public class ChatServiceImpl implements ChatService {
         chatUserDaoAdapter.save(constructChatUserEntity(chat, initiator, UserRole.ADMIN));
         chatUserDaoAdapter.save(constructChatUserEntity(chat, recipient, UserRole.ADMIN));
 
-        return new ChatEvent(chat.getId(), ChatAction.CREATE);
+        return new ChatEvent(chat.getId(), recipient.getId(), ChatAction.CREATE);
     }
 
     @Override
