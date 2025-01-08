@@ -51,6 +51,8 @@ dependencies {
         "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     )
 
+    runtimeOnly("org.aspectj:aspectjweaver")
+
     testImplementation(
         "org.springframework.boot:spring-boot-starter-test",
         "org.springframework.boot:spring-boot-testcontainers",
