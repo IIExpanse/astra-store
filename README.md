@@ -8,7 +8,7 @@ ___
 
 ## Technologies and libraries
 
-- Java 17
+- Java 21
 - Gradle
 - Spring Framework (Boot, Web, Websocket, Data, AOP)
 - Elastic, FluentD, Kibana
