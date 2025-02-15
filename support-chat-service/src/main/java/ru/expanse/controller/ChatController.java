@@ -22,7 +22,7 @@ import ru.expanse.service.ChatService;
 public class ChatController {
     private final ChatService messageService;
     private final SimpMessagingTemplate template;
-    public static final String EVENTS_TOPIC = "/topic/chat-events";
+    public static final String CHAT_EVENTS_TOPIC = "/topic/chat-events";
 
     @GetMapping("/chats/messages")
     public ResponseEntity<GetChatWithMessagesResponse> getChatWithMessages(@Valid @RequestBody GetChatWithMessagesRequest request) {
@@ -32,6 +32,6 @@ public class ChatController {
     @MessageMapping("/chat/create")
     public void createChat(@Valid @Payload SaveChatRequest request) {
         ChatEvent chatEvent = messageService.saveChat(request);
-        template.convertAndSend(EVENTS_TOPIC, chatEvent);
+        template.convertAndSend(CHAT_EVENTS_TOPIC, chatEvent);
     }
 }

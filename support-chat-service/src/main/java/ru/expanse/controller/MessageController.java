@@ -27,7 +27,7 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate template;
-    public static final String EVENTS_TOPIC = "/topic/message-events";
+    public static final String MESSAGE_EVENTS_TOPIC = "/topic/message-events";
 
     @GetMapping("/message/{id}")
     public ResponseEntity<MessageRecord> getMessage(@PathVariable Long id) {
@@ -58,6 +58,6 @@ public class MessageController {
     }
 
     private String getChatPath(Long chatId) {
-        return EVENTS_TOPIC + "/chat/" + chatId;
+        return MESSAGE_EVENTS_TOPIC + "/chat/" + chatId;
     }
 }
