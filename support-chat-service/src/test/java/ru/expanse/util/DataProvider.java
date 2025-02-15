@@ -7,6 +7,7 @@ import ru.expanse.model.Message;
 import ru.expanse.model.User;
 import ru.expanse.model.UserRole;
 import ru.expanse.schema.MessageRecord;
+import ru.expanse.schema.SaveChatRequest;
 import ru.expanse.schema.SaveMessageRequest;
 
 import java.time.OffsetDateTime;
@@ -50,6 +51,13 @@ public class DataProvider {
         );
     }
 
+    public static SaveChatRequest getDefaultSaveChatRequest() {
+        return new SaveChatRequest(1L,
+                1L,
+                "New chat"
+        );
+    }
+
     public static MessageRecord getDefaultMessageRecord() {
         return new MessageRecord(
                 1L,
@@ -58,5 +66,9 @@ public class DataProvider {
                 null,
                 2L
         );
+    }
+
+    public static String getWsPath(Integer port) {
+        return String.format("ws://localhost:%d/ws", port);
     }
 }
