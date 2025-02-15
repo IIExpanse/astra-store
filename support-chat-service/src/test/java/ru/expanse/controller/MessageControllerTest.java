@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.expanse.controller.MessageController.EVENTS_TOPIC;
+import static ru.expanse.controller.MessageController.MESSAGE_EVENTS_TOPIC;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -107,7 +107,7 @@ class MessageControllerTest {
             blockingQueue = new LinkedBlockingDeque<>();
 
             stompClient.setMessageConverter(new MappingJackson2MessageConverter(objectMapper));
-            session = stompClient.connectAsync(getWsPath(), new DefaultStompSessionHandler())
+            session = stompClient.connectAsync(DataProvider.getWsPath(port), new DefaultStompSessionHandler())
                     .get(1, TimeUnit.SECONDS);
         }
 
@@ -126,7 +126,7 @@ class MessageControllerTest {
 
             SaveMessageRequest request = DataProvider.getDefaultSaveMessageRequest();
 
-            session.send("/ws-request/message/create", request);
+            session.send("/request/message/create", request);
             assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
@@ -140,7 +140,7 @@ class MessageControllerTest {
 
             UpdateMessageRequest request = new UpdateMessageRequest(1L, "abc");
 
-            session.send("/ws-request/message/update", request);
+            session.send("/request/message/update", request);
             assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
@@ -154,7 +154,7 @@ class MessageControllerTest {
 
             DeleteMessageRequest request = new DeleteMessageRequest(1L);
 
-            session.send("/ws-request/message/delete", request);
+            session.send("/request/message/delete", request);
             assertEquals(event, blockingQueue.poll(1, TimeUnit.SECONDS));
         }
 
@@ -176,12 +176,8 @@ class MessageControllerTest {
             }
         }
 
-        private String getWsPath() {
-            return String.format("ws://localhost:%d/ws", port);
-        }
-
         private String getChatPath(Long chatId) {
-            return EVENTS_TOPIC + "/chat/" + chatId;
+            return MESSAGE_EVENTS_TOPIC + "/chat/" + chatId;
         }
     }
 }
