@@ -57,3 +57,6 @@ ALTER TABLE chat.chat_user
 
 ALTER TABLE chat.chat_user
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users.user (id);
+
+ALTER TABLE chat.chat_user
+    ADD CONSTRAINT uq_user_chat_id UNIQUE (user_id, chat_id);
