@@ -64,16 +64,16 @@ class MessageControllerTest {
         @Test
         @SneakyThrows
         void getMessage() {
-            MessageRecord record = DataProvider.getDefaultMessageRecord();
+            MessageRecord messageRecord = DataProvider.getDefaultMessageRecord();
             when(messageService.getMessage(ArgumentMatchers.anyLong()))
-                    .thenReturn(record);
+                    .thenReturn(messageRecord);
 
             mockMvc.perform(
                             get("/message/1")
                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     )
                     .andExpect(status().isOk())
-                    .andExpect(content().json(objectMapper.writeValueAsString(record)));
+                    .andExpect(content().json(objectMapper.writeValueAsString(messageRecord)));
         }
 
         @Test
@@ -101,7 +101,7 @@ class MessageControllerTest {
 
         @BeforeEach
         @SneakyThrows
-        public void setup() {
+        void setup() {
             WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
                     List.of(new WebSocketTransport(new StandardWebSocketClient()))));
             blockingQueue = new LinkedBlockingDeque<>();
@@ -112,7 +112,7 @@ class MessageControllerTest {
         }
 
         @AfterEach
-        public void disconnect() {
+        void disconnect() {
             session.disconnect();
         }
 

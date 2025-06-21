@@ -91,7 +91,7 @@ class ChatControllerTest {
 
         @BeforeEach
         @SneakyThrows
-        public void setup() {
+        void setup() {
             WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
                     List.of(new WebSocketTransport(new StandardWebSocketClient()))));
             blockingQueue = new LinkedBlockingDeque<>();
@@ -102,7 +102,7 @@ class ChatControllerTest {
         }
 
         @AfterEach
-        public void disconnect() {
+        void disconnect() {
             session.disconnect();
         }
 
